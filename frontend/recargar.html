@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d18">
+    <meta name="description" content="Consulta el proceso de recarga de saldo mediante USDT en El Hacker de las Maquinitas.">
+    <title>Recargar saldo | El Hacker de las Maquinitas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <header class="encabezado">
+        <a class="marca" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p class="subtitulo-marca">
+            Soluciones de software para técnicos de celulares
+        </p>
+    </header>
+
+    <div class="barra-informativa">
+        <p>Recargas · USDT · Red TRC20</p>
+    </div>
+
+    
+<nav class="menu-principal" aria-label="Navegación principal">
+    <a href="index.html">Inicio</a>
+    <a href="venta.html">Licencias y créditos</a>
+    <a href="alquiler.html">Alquiler</a>
+    <a class="boton-recarga" href="recargar.html">Recargar saldo</a>
+    <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
+    <a href="dashboard.html">Mi panel</a>
+    <a href="login.html">Iniciar sesión</a>
+    <a class="boton-registro" href="registro.html">Crear cuenta</a>
+</nav>
+
+
+    <main class="pagina-catalogo">
+        <section class="cabecera-catalogo">
+            <span class="etiqueta">SALDO DE USUARIO</span>
+            <h1>Recargar saldo</h1>
+            <p>
+                Consulta el procedimiento previsto para recargar saldo
+                mediante USDT en la red TRON (TRC20).
+            </p>
+        </section>
+
+        <section class="aviso-demostracion">
+            <strong>Recargas todavía no habilitadas</strong>
+            <p>
+                Esta pantalla es una demostración. Aún no hay una dirección
+                de depósito configurada ni un sistema que verifique
+                transacciones o actualice saldos.
+            </p>
+        </section>
+
+        <div class="rejilla-recarga">
+            <section class="tarjeta-recarga">
+                <span class="etiqueta">PASO 1</span>
+                <h2>Consulta los datos de depósito</h2>
+                <p>
+                    Antes de transferir fondos, la plataforma deberá mostrar
+                    una dirección de depósito verificada y confirmar la red
+                    aceptada.
+                </p>
+
+                <div class="dato-recarga">
+                    <span>Activo digital</span>
+                    <strong>USDT</strong>
+                </div>
+
+                <div class="dato-recarga">
+                    <span>Red prevista</span>
+                    <strong>TRON (TRC20)</strong>
+                </div>
+
+                <div class="aviso-seguridad">
+                    No envíes fondos a una dirección obtenida de una
+                    demostración. La dirección oficial deberá configurarse
+                    y verificarse antes de habilitar las recargas.
+                </div>
+            </section>
+
+            <section class="tarjeta-recarga">
+                <span class="etiqueta">PASO 2</span>
+                <h2>Registrar una solicitud</h2>
+                <p>
+                    Cuando el servicio esté habilitado, podrás presentar
+                    una solicitud para identificar tu transacción.
+                </p>
+
+                <form id="formularioRecarga">
+                    <div class="campo-formulario">
+                        <label for="correoRecarga">Correo de tu cuenta</label>
+                        <input
+                            type="email"
+                            id="correoRecarga"
+                            name="correo"
+                            placeholder="ejemplo@correo.com"
+                            autocomplete="email"
+                            maxlength="254"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="montoRecarga">Monto en USDT</label>
+                        <input
+                            type="number"
+                            id="montoRecarga"
+                            name="monto"
+                            placeholder="Ej. 10"
+                            min="0.01"
+                            max="1000000"
+                            step="0.01"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="referenciaRecarga">
+                            Referencia de transacción (opcional)
+                        </label>
+                        <input
+                            type="text"
+                            id="referenciaRecarga"
+                            name="referencia"
+                            placeholder="Identificador de la transacción"
+                            maxlength="150"
+                        >
+                    </div>
+
+                    <button class="boton-enviar" type="submit">
+                        Validar solicitud de demostración
+                    </button>
+
+                    <p
+                        id="mensajeRecarga"
+                        class="mensaje-formulario"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                </form>
+
+                <p class="nota-demo">
+                    El formulario no envía datos, verifica pagos ni acredita
+                    saldo. No transfieras fondos desde esta pantalla.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <footer class="pie-pagina">
+        <a class="marca marca-pie" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p>Plataforma en desarrollo para técnicos de celulares.</p>
+        <p class="copyright">© 2026 El Hacker de las Maquinitas.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

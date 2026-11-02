@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d18">
+    <title>Mi carrito | El Hacker de las Maquinitas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <header class="encabezado">
+        <a class="marca" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p class="subtitulo-marca">Soluciones de software para técnicos de celulares</p>
+    </header>
+
+    <div class="barra-informativa">
+        <p>Carrito de compras · Pedido de demostración</p>
+    </div>
+
+    
+<nav class="menu-principal" aria-label="Navegación principal">
+    <a href="index.html">Inicio</a>
+    <a href="venta.html">Licencias y créditos</a>
+    <a href="alquiler.html">Alquiler</a>
+    <a class="boton-recarga" href="recargar.html">Recargar saldo</a>
+    <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
+    <a href="dashboard.html">Mi panel</a>
+    <a href="login.html">Iniciar sesión</a>
+    <a class="boton-registro" href="registro.html">Crear cuenta</a>
+</nav>
+
+
+    <main class="pagina-catalogo">
+        <section class="cabecera-catalogo">
+            <span class="etiqueta">TU COMPRA</span>
+            <h1>Mi carrito</h1>
+            <p>Revisa los productos seleccionados antes de continuar.</p>
+        </section>
+
+        <div class="carrito-distribucion">
+            <section class="carrito-listado">
+                <h2>Productos seleccionados</h2>
+
+                <div id="productosCarrito" aria-live="polite">
+                    <p class="carrito-vacio">
+                        Cargando los productos del carrito...
+                    </p>
+                </div>
+
+                <a class="enlace-volver" href="venta.html">
+                    ← Volver al catálogo
+                </a>
+            </section>
+
+            <aside class="resumen-carrito">
+                <h2>Resumen del pedido</h2>
+
+                <div class="fila-resumen">
+                    <span>Productos</span>
+                    <strong id="cantidadCarrito">0</strong>
+                </div>
+
+                <div class="fila-resumen">
+                    <span>Subtotal de demostración</span>
+                    <strong id="subtotalCarrito">$0</strong>
+                </div>
+
+                <div class="total-carrito">
+                    <span>Total de demostración</span>
+                    <strong id="totalCarrito">$0</strong>
+                </div>
+
+                <p class="nota-demo">
+                    Los precios son ilustrativos. Este carrito no realiza
+                    cobros ni genera pedidos reales.
+                </p>
+
+                <button id="continuarPedido" class="boton-enviar" type="button">
+                    Continuar
+                </button>
+
+                <p id="mensajeCarrito" class="mensaje-formulario"
+                   role="status" aria-live="polite"></p>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="pie-pagina">
+        <a class="marca marca-pie" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p>Plataforma en desarrollo para técnicos de celulares.</p>
+        <p class="copyright">© 2026 El Hacker de las Maquinitas.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

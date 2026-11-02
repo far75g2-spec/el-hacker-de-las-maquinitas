@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d18">
+    <title>Mis pedidos | El Hacker de las Maquinitas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <header class="encabezado">
+        <a class="marca" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p class="subtitulo-marca">Soluciones de software para técnicos de celulares</p>
+    </header>
+
+    <div class="barra-informativa">
+        <p>Área de cliente · Seguimiento de pedidos</p>
+    </div>
+
+    <nav class="menu-principal" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="venta.html">Licencias y créditos</a>
+        <a href="alquiler.html">Alquiler</a>
+        <a class="boton-recarga" href="recargar.html">Recargar saldo</a>
+        <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
+        <a class="enlace-activo" href="ordenes.html">Mis pedidos</a>
+        <a href="dashboard.html">Mi panel</a>
+    </nav>
+
+    <main class="pagina-catalogo">
+        <section class="cabecera-catalogo">
+            <span class="etiqueta">HISTORIAL DE COMPRAS</span>
+            <h1>Mis pedidos</h1>
+            <p>Consulta el estado y los detalles de tus solicitudes.</p>
+        </section>
+
+        <section class="aviso-demostracion">
+            <strong>Historial de demostración</strong>
+            <p>
+                Esta página todavía no está conectada a una base de datos.
+                No muestra compras reales ni confirma transacciones.
+            </p>
+        </section>
+
+        <section class="catalogo-seccion">
+            <div class="titulo-catalogo">
+                <h2>Seguimiento de pedidos</h2>
+                <span class="contador-productos">Ejemplo visual</span>
+            </div>
+
+            <div class="tabla-pedidos-contenedor">
+                <table class="tabla-pedidos">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Fecha</th>
+                            <th>Detalle</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaPedidos">
+                        <tr>
+                            <td colspan="5" class="pedidos-vacios">
+                                Todavía no hay pedidos reales registrados.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="seguridad-panel">
+            <h2>¿Cómo funcionará el seguimiento?</h2>
+            <p>
+                Cuando conectemos el sistema, cada pedido tendrá un
+                identificador y un estado actualizado por el administrador.
+                Podrás consultar el progreso sin depender de mensajes externos.
+            </p>
+        </section>
+
+        <div class="acciones-pedidos">
+            <a class="boton boton-principal" href="venta.html">Explorar catálogo</a>
+            <a class="boton boton-secundario" href="dashboard.html">Volver a mi panel</a>
+        </div>
+    </main>
+
+    <footer class="pie-pagina">
+        <a class="marca marca-pie" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p>Plataforma en desarrollo para técnicos de celulares.</p>
+        <p class="copyright">© 2026 El Hacker de las Maquinitas.</p>
+    </footer>
+</body>
+</html>

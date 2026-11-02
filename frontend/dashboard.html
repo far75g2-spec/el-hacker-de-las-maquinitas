@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d18">
+    <meta name="description" content="Panel de usuario de El Hacker de las Maquinitas.">
+    <title>Mi panel | El Hacker de las Maquinitas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <header class="encabezado">
+        <a class="marca" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p class="subtitulo-marca">
+            Soluciones de software para técnicos de celulares
+        </p>
+    </header>
+
+    <div class="barra-informativa">
+        <p>Panel de usuario · Versión de demostración</p>
+    </div>
+
+    <nav class="menu-principal" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="venta.html">Licencias y créditos</a>
+        <a href="alquiler.html">Alquiler</a>
+        <a class="boton-recarga" href="recargar.html">Recargar saldo</a>
+        <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
+        <a href="ordenes.html">Mis pedidos</a>
+        <a class="enlace-activo" href="dashboard.html">Mi panel</a>
+        <a href="login.html">Cerrar / iniciar sesión</a>
+    </nav>
+
+    <main class="panel-usuario">
+        <section class="bienvenida-panel">
+            <div>
+                <span class="etiqueta">ÁREA DE CLIENTE</span>
+                <h1>Mi panel de usuario</h1>
+                <p>
+                    Desde aquí podrás acceder a las funciones principales
+                    de El Hacker de las Maquinitas.
+                </p>
+            </div>
+            <span class="estado-demostracion">MODO DEMOSTRACIÓN</span>
+        </section>
+
+        <section class="aviso-demostracion">
+            <strong>Datos de ejemplo</strong>
+            <p>
+                Este panel todavía no está conectado a una cuenta real.
+                El saldo y los indicadores no representan dinero ni
+                operaciones existentes.
+            </p>
+        </section>
+
+        <section class="rejilla-resumen">
+            <article class="tarjeta-resumen">
+                <span class="resumen-etiqueta">Saldo disponible</span>
+                <strong class="resumen-valor">-- USDT</strong>
+                <p>Se mostrará al conectar tu cuenta.</p>
+                <a href="recargar.html">Ir a recargas →</a>
+            </article>
+
+            <article class="tarjeta-resumen">
+                <span class="resumen-etiqueta">Mis pedidos</span>
+                <strong class="resumen-valor">--</strong>
+                <p>Historial pendiente de conexión.</p>
+                <a href="ordenes.html">Consultar pedidos →</a>
+            </article>
+
+            <article class="tarjeta-resumen">
+                <span class="resumen-etiqueta">Carrito</span>
+                <strong class="resumen-valor">Ver artículos</strong>
+                <p>Revisa los productos que has seleccionado.</p>
+                <a href="carrito.html">Abrir carrito →</a>
+            </article>
+        </section>
+
+        <section class="acciones-panel">
+            <div class="encabezado-panel-seccion">
+                <span class="etiqueta">ACCESOS RÁPIDOS</span>
+                <h2>¿Qué deseas hacer?</h2>
+            </div>
+
+            <div class="rejilla-acciones">
+                <a class="accion-panel" href="venta.html">
+                    <span class="icono-accion">⌘</span>
+                    <span>
+                        <strong>Explorar catálogo</strong>
+                        <small>Consultar licencias y créditos</small>
+                    </span>
+                    <span class="flecha-accion">→</span>
+                </a>
+
+                <a class="accion-panel" href="alquiler.html">
+                    <span class="icono-accion">⚙</span>
+                    <span>
+                        <strong>Alquiler de herramientas</strong>
+                        <small>Consultar opciones de alquiler</small>
+                    </span>
+                    <span class="flecha-accion">→</span>
+                </a>
+
+                <a class="accion-panel" href="recargar.html">
+                    <span class="icono-accion">₮</span>
+                    <span>
+                        <strong>Recargar saldo</strong>
+                        <small>Consultar el procedimiento USDT</small>
+                    </span>
+                    <span class="flecha-accion">→</span>
+                </a>
+
+                <a class="accion-panel" href="ordenes.html">
+                    <span class="icono-accion">▤</span>
+                    <span>
+                        <strong>Seguimiento de pedidos</strong>
+                        <small>Consultar el estado de tus pedidos</small>
+                    </span>
+                    <span class="flecha-accion">→</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="seguridad-panel">
+            <h2>Tu cuenta, en un solo lugar</h2>
+            <p>
+                Cuando implementemos el backend, este panel mostrará
+                los datos de tu cuenta, tu saldo confirmado y el historial
+                de pedidos asociado a tu usuario.
+            </p>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <a class="marca marca-pie" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p>Plataforma en desarrollo para técnicos de celulares.</p>
+        <p class="copyright">© 2026 El Hacker de las Maquinitas.</p>
+    </footer>
+</body>
+</html>

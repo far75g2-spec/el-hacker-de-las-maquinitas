@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d18">
+    <meta name="description" content="Inicia sesión en El Hacker de las Maquinitas.">
+    <title>Iniciar sesión | El Hacker de las Maquinitas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <header class="encabezado">
+        <a class="marca" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p class="subtitulo-marca">
+            Soluciones de software para técnicos de celulares
+        </p>
+    </header>
+
+    <div class="barra-informativa">
+        <p>Acceso de demostración · Plataforma en desarrollo</p>
+    </div>
+
+    
+<nav class="menu-principal" aria-label="Navegación principal">
+    <a href="index.html">Inicio</a>
+    <a href="venta.html">Licencias y créditos</a>
+    <a href="alquiler.html">Alquiler</a>
+    <a class="boton-recarga" href="recargar.html">Recargar saldo</a>
+    <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
+    <a href="dashboard.html">Mi panel</a>
+    <a href="login.html">Iniciar sesión</a>
+    <a class="boton-registro" href="registro.html">Crear cuenta</a>
+</nav>
+
+
+    <main class="contenedor-registro">
+        <section class="tarjeta-registro">
+            <span class="etiqueta">BIENVENIDO DE NUEVO</span>
+            <h1>Iniciar sesión</h1>
+            <p class="descripcion-registro">
+                Ingresa tus datos para acceder a tu cuenta.
+            </p>
+
+            <form id="formularioLogin">
+                <div class="campo-formulario">
+                    <label for="correoLogin">Correo electrónico</label>
+                    <input
+                        type="email"
+                        id="correoLogin"
+                        name="correo"
+                        placeholder="ejemplo@correo.com"
+                        autocomplete="email"
+                        maxlength="254"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="contrasenaLogin">Contraseña</label>
+                    <input
+                        type="password"
+                        id="contrasenaLogin"
+                        name="contrasena"
+                        placeholder="Escribe tu contraseña"
+                        autocomplete="current-password"
+                        maxlength="128"
+                        required
+                    >
+                </div>
+
+                <button class="boton-enviar" type="submit">
+                    Iniciar sesión
+                </button>
+
+                <p
+                    id="mensajeLogin"
+                    class="mensaje-formulario"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </form>
+
+            <p class="enlace-login">
+                ¿Todavía no tienes cuenta?
+                <a href="registro.html">Regístrate aquí</a>
+            </p>
+
+            <p class="nota-demo">
+                La autenticación real todavía no está habilitada.
+                Este formulario no verifica usuarios ni contraseñas.
+            </p>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <a class="marca marca-pie" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p>Plataforma en desarrollo para técnicos de celulares.</p>
+        <p class="copyright">
+            © 2026 El Hacker de las Maquinitas.
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

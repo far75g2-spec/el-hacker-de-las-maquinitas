@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d18">
+    <title>Crear cuenta | El Hacker de las Maquinitas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <header class="encabezado">
+        <a class="marca" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p class="subtitulo-marca">
+            Soluciones de software para técnicos de celulares
+        </p>
+    </header>
+
+    <div class="barra-informativa">
+        <p>Registro de demostración · Plataforma en desarrollo</p>
+    </div>
+
+    
+
+<nav class="menu-principal" aria-label="Navegación principal">
+    <a href="index.html">Inicio</a>
+    <a href="venta.html">Licencias y créditos</a>
+    <a href="alquiler.html">Alquiler</a>
+    <a class="boton-recarga" href="recargar.html">Recargar saldo</a>
+    <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
+    <a href="dashboard.html">Mi panel</a>
+    <a href="login.html">Iniciar sesión</a>
+    <a class="boton-registro" href="registro.html">Crear cuenta</a>
+</nav>
+
+
+
+    <main class="contenedor-registro">
+        <section class="tarjeta-registro">
+            <span class="etiqueta">ÚNETE A LA PLATAFORMA</span>
+            <h1>Crear una cuenta</h1>
+            <p class="descripcion-registro">
+                Regístrate para acceder a las futuras funciones
+                de El Hacker de las Maquinitas.
+            </p>
+
+            <form id="formularioRegistro">
+                <div class="campo-formulario">
+                    <label for="nombre">Nombre completo</label>
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Escribe tu nombre"
+                        autocomplete="name"
+                        minlength="3"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="correo">Correo electrónico</label>
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        placeholder="ejemplo@correo.com"
+                        autocomplete="email"
+                        maxlength="254"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="telefono">Teléfono (opcional)</label>
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        placeholder="Tu número de contacto"
+                        autocomplete="tel"
+                        maxlength="20"
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="contrasena">Contraseña</label>
+                    <input
+                        type="password"
+                        id="contrasena"
+                        name="contrasena"
+                        placeholder="Mínimo 8 caracteres"
+                        autocomplete="new-password"
+                        minlength="8"
+                        maxlength="128"
+                        required
+                    >
+                    <small>Usa al menos 8 caracteres para esta demostración.</small>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="confirmarContrasena">Confirmar contraseña</label>
+                    <input
+                        type="password"
+                        id="confirmarContrasena"
+                        name="confirmarContrasena"
+                        placeholder="Escribe nuevamente la contraseña"
+                        autocomplete="new-password"
+                        minlength="8"
+                        maxlength="128"
+                        required
+                    >
+                </div>
+
+                <label class="aceptacion">
+                    <input type="checkbox" id="aceptarTerminos" required>
+                    <span>
+                        Acepto revisar los términos y la política de privacidad
+                        antes de utilizar el servicio real.
+                    </span>
+                </label>
+
+                <button class="boton-enviar" type="submit">
+                    Validar registro
+                </button>
+
+                <p id="mensajeRegistro" class="mensaje-formulario"
+                   role="status" aria-live="polite"></p>
+            </form>
+
+            <p class="enlace-login">
+                ¿Ya tienes una cuenta?
+                <a href="login.html">Inicia sesión</a>
+            </p>
+
+            <p class="nota-demo">
+                Esta es una demostración visual. No se crea ni se guarda
+                ninguna cuenta real.
+            </p>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <a class="marca marca-pie" href="index.html">
+            <span class="marca-icono">H</span>
+            <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
+        </a>
+        <p>Plataforma en desarrollo para técnicos de celulares.</p>
+        <p class="copyright">© 2026 El Hacker de las Maquinitas.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
