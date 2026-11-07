@@ -1,0 +1,15 @@
+# Archivos generados por Maven
+**/target/
+
+# Archivos de configuración y secretos
+.env
+.env.*
+!.env.example
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Configuración local de IDE
+.idea/
+.vscode/

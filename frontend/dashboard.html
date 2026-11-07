@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,18 +10,20 @@
 </head>
 
 <body>
+
     <header class="encabezado">
         <a class="marca" href="index.html">
             <span class="marca-icono">H</span>
             <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
         </a>
+
         <p class="subtitulo-marca">
             Soluciones de software para técnicos de celulares
         </p>
     </header>
 
     <div class="barra-informativa">
-        <p>Panel de usuario · Versión de demostración</p>
+        <p>Panel de usuario · Cuenta conectada</p>
     </div>
 
     <nav class="menu-principal" aria-label="Navegación principal">
@@ -33,36 +34,59 @@
         <a class="boton-carrito" href="carrito.html">🛒 Mi carrito</a>
         <a href="ordenes.html">Mis pedidos</a>
         <a class="enlace-activo" href="dashboard.html">Mi panel</a>
-        <a href="login.html">Cerrar / iniciar sesión</a>
+        <a href="#" id="cerrarSesion">Cerrar sesión</a>
     </nav>
 
     <main class="panel-usuario">
+
+        <!-- BIENVENIDA -->
         <section class="bienvenida-panel">
             <div>
                 <span class="etiqueta">ÁREA DE CLIENTE</span>
-                <h1>Mi panel de usuario</h1>
+
+                <h1>
+                    Bienvenido,
+                    <span id="nombreUsuario">Cargando...</span>
+                </h1>
+
                 <p>
-                    Desde aquí podrás acceder a las funciones principales
-                    de El Hacker de las Maquinitas.
+                    Desde aquí podrás administrar tu cuenta y acceder
+                    a las funciones principales de la plataforma.
+                </p>
+
+                <p>
+                    Correo:
+                    <strong id="correoUsuario">Cargando...</strong>
+                </p>
+
+                <p>
+                    Tipo de cuenta:
+                    <strong id="rolUsuario">Cargando...</strong>
                 </p>
             </div>
-            <span class="estado-demostracion">MODO DEMOSTRACIÓN</span>
+
+            <span class="estado-demostracion">
+                CUENTA CONECTADA
+            </span>
         </section>
 
+        <!-- INFORMACIÓN DE CUENTA -->
         <section class="aviso-demostracion">
-            <strong>Datos de ejemplo</strong>
+            <strong>Información de tu cuenta</strong>
             <p>
-                Este panel todavía no está conectado a una cuenta real.
-                El saldo y los indicadores no representan dinero ni
-                operaciones existentes.
+                Tu cuenta está conectada al sistema de usuarios.
+                Las funciones de saldo, compras y pedidos
+                se habilitarán progresivamente.
             </p>
         </section>
 
+        <!-- RESUMEN -->
         <section class="rejilla-resumen">
+
             <article class="tarjeta-resumen">
                 <span class="resumen-etiqueta">Saldo disponible</span>
                 <strong class="resumen-valor">-- USDT</strong>
-                <p>Se mostrará al conectar tu cuenta.</p>
+                <p>Saldo pendiente de conexión.</p>
                 <a href="recargar.html">Ir a recargas →</a>
             </article>
 
@@ -76,18 +100,22 @@
             <article class="tarjeta-resumen">
                 <span class="resumen-etiqueta">Carrito</span>
                 <strong class="resumen-valor">Ver artículos</strong>
-                <p>Revisa los productos que has seleccionado.</p>
+                <p>Revisa los productos seleccionados.</p>
                 <a href="carrito.html">Abrir carrito →</a>
             </article>
+
         </section>
 
+        <!-- ACCESOS RÁPIDOS -->
         <section class="acciones-panel">
+
             <div class="encabezado-panel-seccion">
                 <span class="etiqueta">ACCESOS RÁPIDOS</span>
                 <h2>¿Qué deseas hacer?</h2>
             </div>
 
             <div class="rejilla-acciones">
+
                 <a class="accion-panel" href="venta.html">
                     <span class="icono-accion">⌘</span>
                     <span>
@@ -110,7 +138,7 @@
                     <span class="icono-accion">₮</span>
                     <span>
                         <strong>Recargar saldo</strong>
-                        <small>Consultar el procedimiento USDT</small>
+                        <small>Consultar procedimiento USDT</small>
                     </span>
                     <span class="flecha-accion">→</span>
                 </a>
@@ -119,30 +147,134 @@
                     <span class="icono-accion">▤</span>
                     <span>
                         <strong>Seguimiento de pedidos</strong>
-                        <small>Consultar el estado de tus pedidos</small>
+                        <small>Consultar estado de tus pedidos</small>
                     </span>
                     <span class="flecha-accion">→</span>
                 </a>
+
             </div>
         </section>
 
+        <!-- SEGURIDAD -->
         <section class="seguridad-panel">
             <h2>Tu cuenta, en un solo lugar</h2>
             <p>
-                Cuando implementemos el backend, este panel mostrará
-                los datos de tu cuenta, tu saldo confirmado y el historial
-                de pedidos asociado a tu usuario.
+                Estamos desarrollando las funciones para administrar
+                tu saldo, compras, alquileres e historial de pedidos.
             </p>
         </section>
+
     </main>
 
+    <!-- PIE DE PÁGINA -->
     <footer class="pie-pagina">
+
         <a class="marca marca-pie" href="index.html">
             <span class="marca-icono">H</span>
             <span>EL HACKER <strong>DE LAS MAQUINITAS</strong></span>
         </a>
+
         <p>Plataforma en desarrollo para técnicos de celulares.</p>
-        <p class="copyright">© 2026 El Hacker de las Maquinitas.</p>
+
+        <p class="copyright">
+            © 2026 El Hacker de las Maquinitas.
+        </p>
+
     </footer>
+
+    <!-- CONSULTA Y CONTROL DE SESIÓN EN JAVA -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+
+            const nombreUsuario = document.getElementById("nombreUsuario");
+            const correoUsuario = document.getElementById("correoUsuario");
+            const rolUsuario = document.getElementById("rolUsuario");
+            const botonCerrarSesion = document.getElementById("cerrarSesion");
+
+            const API = "http://127.0.0.1:7000";
+
+            // COMPROBAR SESIÓN EN EL SERVIDOR
+            try {
+
+                const respuesta = await fetch(
+                    API + "/api/sesion",
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+
+                if (respuesta.status === 401) {
+                    window.location.replace("login.html");
+                    return;
+                }
+
+                if (!respuesta.ok) {
+                    throw new Error("No se pudo verificar la sesión.");
+                }
+
+                const resultado = await respuesta.json();
+
+                if (!resultado.usuario) {
+                    throw new Error("No se recibieron los datos del usuario.");
+                }
+
+                const usuario = resultado.usuario;
+
+                // Mostrar datos confirmados por Java
+                nombreUsuario.textContent = usuario.nombre;
+                correoUsuario.textContent = usuario.correo;
+                rolUsuario.textContent = usuario.rol;
+
+            } catch (error) {
+
+                console.error("Error al verificar sesión:", error);
+
+                alert("No fue posible verificar tu sesión. Inicia sesión nuevamente.");
+
+                window.location.replace("login.html");
+                return;
+            }
+
+            // CERRAR SESIÓN EN EL SERVIDOR
+            botonCerrarSesion.addEventListener("click", async function (evento) {
+
+                evento.preventDefault();
+
+                botonCerrarSesion.textContent = "Cerrando sesión...";
+
+                try {
+
+                    const respuesta = await fetch(
+                        API + "/api/logout",
+                        {
+                            method: "POST",
+                            credentials: "include"
+                        }
+                    );
+
+                    if (!respuesta.ok) {
+                        throw new Error("No se pudo cerrar la sesión.");
+                    }
+
+                    // Limpiar datos auxiliares del navegador
+                    sessionStorage.removeItem("usuarioSesion");
+
+                    window.location.replace("login.html");
+
+                } catch (error) {
+
+                    console.error("Error al cerrar sesión:", error);
+
+                    alert("No se pudo cerrar la sesión. Intenta nuevamente.");
+
+                    botonCerrarSesion.textContent = "Cerrar sesión";
+                }
+
+            });
+
+        });
+    </script>
+
 </body>
 </html>
