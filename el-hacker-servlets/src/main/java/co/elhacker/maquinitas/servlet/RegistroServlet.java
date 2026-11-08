@@ -8,110 +8,121 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
- * Servlet encargado de gestionar el registro
- * de nuevos usuarios en la aplicación web.
+ * Servlet encargado de registrar usuarios y responder al frontend React.
  */
 @WebServlet("/registro")
 public class RegistroServlet extends HttpServlet {
 
-    // Objeto encargado de realizar las operaciones sobre la tabla usuarios.
     private UsuarioDAO usuarioDAO;
 
-    /**
-     * Inicializa el objeto de acceso a datos.
-     *
-     * @throws ServletException si ocurre un error durante la inicialización.
-     */
     @Override
     public void init() throws ServletException {
         usuarioDAO = new UsuarioDAO();
     }
 
     /**
-     * Muestra el formulario de registro.
-     *
-     * @param request solicitud HTTP recibida.
-     * @param response respuesta HTTP enviada al navegador.
-     * @throws ServletException si ocurre un error del servlet.
-     * @throws IOException si ocurre un error de entrada o salida.
+     * Conserva la vista JSP para el acceso tradicional.
      */
     @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Carga la vista del formulario de registro.
         request.getRequestDispatcher("/registro.jsp")
-               .forward(request, response);
+                .forward(request, response);
     }
 
     /**
-     * Procesa los datos enviados desde el formulario de registro.
-     *
-     * @param request solicitud HTTP con los datos del usuario.
-     * @param response respuesta HTTP enviada al navegador.
-     * @throws ServletException si ocurre un error del servlet.
-     * @throws IOException si ocurre un error de entrada o salida.
+     * Recibe los datos enviados desde React y registra el usuario.
      */
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
+    protected void doPost(
+            HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Configura la codificación para admitir caracteres especiales.
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        // Obtiene los datos enviados desde el formulario.
         String nombre = request.getParameter("nombre");
         String correo = request.getParameter("correo");
         String telefono = request.getParameter("telefono");
         String clave = request.getParameter("clave");
 
-        // Valida que los campos obligatorios tengan información.
-        if (nombre == null || correo == null ||
-            clave == null || nombre.isBlank() ||
-            correo.isBlank() || clave.isBlank()) {
+        if (nombre == null || correo == null || clave == null
+                || nombre.isBlank() || correo.isBlank() || clave.isBlank()) {
 
-            // Informa al usuario si faltan datos obligatorios.
-            request.setAttribute("mensaje",
-                    "Todos los campos obligatorios deben completarse.");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
-            request.getRequestDispatcher("/registro.jsp")
-                   .forward(request, response);
+            enviarRespuesta(response,
+                    false,
+                    "Completa todos los campos obligatorios.");
+
             return;
         }
 
         try {
-            // Envía los datos al DAO para guardar el nuevo usuario.
             boolean registrado = usuarioDAO.registrar(
-                    nombre, correo, telefono, clave
+                    nombre.trim(),
+                    correo.trim(),
+                    telefono == null ? "" : telefono.trim(),
+                    clave
             );
 
-            // Genera un mensaje según el resultado de la operación.
             if (registrado) {
-                request.setAttribute("mensaje",
+                response.setStatus(HttpServletResponse.SC_CREATED);
+
+                enviarRespuesta(response,
+                        true,
                         "Usuario registrado correctamente.");
+
             } else {
-                request.setAttribute("mensaje",
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+
+                enviarRespuesta(response,
+                        false,
                         "No fue posible registrar el usuario. Verifica el correo.");
             }
 
         } catch (Exception e) {
 
-            // Registra el error en el servidor para facilitar su diagnóstico.
             getServletContext().log(
                     "Error durante el registro de usuario", e
             );
 
-            // Muestra un mensaje general sin exponer detalles técnicos.
-            request.setAttribute("mensaje",
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+            enviarRespuesta(response,
+                    false,
                     "Ocurrió un error al procesar el registro.");
         }
+    }
 
-        // Regresa al formulario para mostrar el resultado de la operación.
-        request.getRequestDispatcher("/registro.jsp")
-               .forward(request, response);
+    /**
+     * Construye una respuesta JSON sencilla para React.
+     */
+    private void enviarRespuesta(
+            HttpServletResponse response,
+            boolean success,
+            String message) throws IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String mensajeSeguro = message
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"");
+
+        try (PrintWriter out = response.getWriter()) {
+            out.print(
+                    "{\"success\":" + success
+                    + ",\"message\":\"" + mensajeSeguro + "\"}"
+            );
+        }
     }
 }

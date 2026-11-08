@@ -7,108 +7,163 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
- * Clase de acceso a datos de usuarios.
- * Gestiona el registro y la autenticación mediante MySQL.
+ * Acceso a datos y administración de usuarios.
  */
 public class UsuarioDAO {
 
-    /**
-     * Registra un usuario nuevo en la base de datos.
-     *
-     * @param nombre nombre del usuario.
-     * @param correo correo electrónico del usuario.
-     * @param telefono número de contacto.
-     * @param clave contraseña ingresada por el usuario.
-     * @return true si el registro fue exitoso.
-     * @throws SQLException si ocurre un error en la base de datos.
-     */
     public boolean registrar(
             String nombre,
             String correo,
             String telefono,
             String clave) throws SQLException {
 
-        // Consulta SQL para insertar los datos del nuevo usuario.
         String sql = """
                 INSERT INTO usuarios
                 (nombre, correo, telefono, clave_hash, rol, estado)
                 VALUES (?, ?, ?, ?, 'Cliente', 'Activo')
                 """;
 
-        // Genera un hash seguro de la contraseña usando BCrypt.
-        // El factor de trabajo 12 aumenta la dificultad del cálculo.
         String claveHash = BCrypt.hashpw(
                 clave, BCrypt.gensalt(12)
         );
 
-        // Abre la conexión y prepara la consulta SQL.
-        // try-with-resources cierra automáticamente los recursos.
         try (Connection conexion = Conexion.obtenerConexion();
-             PreparedStatement consulta =
-                     conexion.prepareStatement(sql)) {
+             PreparedStatement consulta = conexion.prepareStatement(sql)) {
 
-            // Asigna los valores a los parámetros de la consulta.
             consulta.setString(1, nombre);
             consulta.setString(2, correo);
             consulta.setString(3, telefono);
             consulta.setString(4, claveHash);
 
-            // Ejecuta la inserción y verifica si se creó el registro.
             return consulta.executeUpdate() > 0;
         }
     }
 
-    /**
-     * Verifica las credenciales de acceso de un usuario.
-     *
-     * @param correo correo electrónico registrado.
-     * @param clave contraseña ingresada.
-     * @return identificador del usuario si la autenticación es correcta;
-     *         retorna 0 si las credenciales no son válidas.
-     * @throws SQLException si ocurre un error en la base de datos.
-     */
     public int autenticar(String correo, String clave)
             throws SQLException {
 
-        // Busca el usuario por su correo electrónico.
         String sql = """
                 SELECT id_usuario, clave_hash, estado
                 FROM usuarios
                 WHERE correo = ?
                 """;
 
-        // Establece la conexión y prepara la consulta parametrizada.
         try (Connection conexion = Conexion.obtenerConexion();
-             PreparedStatement consulta =
-                     conexion.prepareStatement(sql)) {
+             PreparedStatement consulta = conexion.prepareStatement(sql)) {
 
-            // Asigna el correo al parámetro de búsqueda.
             consulta.setString(1, correo);
 
-            // Ejecuta la consulta y procesa el resultado.
             try (ResultSet resultado = consulta.executeQuery()) {
-
                 if (resultado.next()) {
-
-                    // Recupera el hash de la contraseña y el estado de la cuenta.
                     String hash = resultado.getString("clave_hash");
                     String estado = resultado.getString("estado");
 
-                    // Comprueba que la cuenta esté activa
-                    // y que la contraseña coincida con el hash almacenado.
                     if ("Activo".equalsIgnoreCase(estado)
                             && BCrypt.checkpw(clave, hash)) {
-
-                        // Retorna el identificador del usuario autenticado.
                         return resultado.getInt("id_usuario");
                     }
                 }
             }
         }
 
-        // Retorna 0 cuando no se encuentran credenciales válidas.
         return 0;
     }
-}
+
+    /**
+     * Obtiene el listado de usuarios sin exponer sus contraseñas.
+     */
+    public List<Map<String, Object>> listarUsuarios()
+            throws SQLException {
+
+        List<Map<String, Object>> usuarios = new ArrayList<>();
+
+        String sql = """
+                SELECT id_usuario, nombre, correo, telefono, rol, estado
+                FROM usuarios
+                ORDER BY id_usuario DESC
+                """;
+
+        try (Connection conexion = Conexion.obtenerConexion();
+             PreparedStatement consulta = conexion.prepareStatement(sql);
+             ResultSet resultado = consulta.executeQuery()) {
+
+            while (resultado.next()) {
+                Map<String, Object> usuario = new LinkedHashMap<>();
+
+                usuario.put("id_usuario",
+                        resultado.getInt("id_usuario"));
+                usuario.put("nombre",
+                        resultado.getString("nombre"));
+                usuario.put("correo",
+                        resultado.getString("correo"));
+                usuario.put("telefono",
+                        resultado.getString("telefono"));
+                usuario.put("rol",
+                        resultado.getString("rol"));
+                usuario.put("estado",
+                        resultado.getString("estado"));
+
+                usuarios.add(usuario);
+            }
+        }
+
+        return usuarios;
+    }
+
+    /**
+     * Cambia el estado de un usuario.
+     */
+    public boolean cambiarEstado(int idUsuario, String estado)
+            throws SQLException {
+
+        if (!"Activo".equalsIgnoreCase(estado)
+                && !"Inactivo".equalsIgnoreCase(estado)) {
+            throw new IllegalArgumentException("Estado no válido.");
+        }
+
+        String sql = """
+                UPDATE usuarios
+                SET estado = ?
+                WHERE id_usuario = ?
+                """;
+
+        try (Connection conexion = Conexion.obtenerConexion();
+             PreparedStatement consulta = conexion.prepareStatement(sql)) {
+
+            consulta.setString(1, estado);
+            consulta.setInt(2, idUsuario);
+
+            return consulta.executeUpdate() > 0;
+        }
+    }
+/**
+ * Consulta el rol de un usuario autenticado.
+ */
+public String obtenerRol(int idUsuario) throws SQLException {
+
+    String sql = """
+            SELECT rol
+            FROM usuarios
+            WHERE id_usuario = ?
+            """;
+
+    try (Connection conexion = Conexion.obtenerConexion();
+         PreparedStatement consulta = conexion.prepareStatement(sql)) {
+
+        consulta.setInt(1, idUsuario);
+
+        try (ResultSet resultado = consulta.executeQuery()) {
+            if (resultado.next()) {
+                return resultado.getString("rol");
+            }
+        }
+    }
+
+    return null;
+}}
