@@ -24,7 +24,7 @@ public class ProductoDAO {
 
         String sql = """
                 SELECT id_producto, nombre, descripcion,
-                       categoria, tipo_producto, precio,
+                       categoria, tipo_producto, precio_usdt AS precio,
                        estado, fecha_creacion
                 FROM productos
                 WHERE estado = 'Activo'
@@ -54,6 +54,39 @@ public class ProductoDAO {
     }
 
     /**
+     * Consulta todos los productos, incluidos los inactivos.
+     * Este método debe utilizarse únicamente desde operaciones administrativas.
+     */
+    public List<Map<String, Object>> listarTodosProductos()
+            throws SQLException {
+
+        List<Map<String, Object>> productos = new ArrayList<>();
+        String sql = """
+                SELECT id_producto, nombre, descripcion,
+                       categoria, tipo_producto, precio_usdt AS precio, estado, fecha_creacion
+                FROM productos
+                ORDER BY id_producto DESC
+                """;
+
+        try (Connection conexion = Conexion.obtenerConexion();
+             PreparedStatement consulta = conexion.prepareStatement(sql);
+             ResultSet resultado = consulta.executeQuery()) {
+            while (resultado.next()) {
+                Map<String, Object> producto = new LinkedHashMap<>();
+                producto.put("id_producto", resultado.getInt("id_producto"));
+                producto.put("nombre", resultado.getString("nombre"));
+                producto.put("descripcion", resultado.getString("descripcion"));
+                producto.put("categoria", resultado.getString("categoria"));
+                producto.put("tipo_producto", resultado.getString("tipo_producto"));
+                producto.put("precio", resultado.getBigDecimal("precio"));
+                producto.put("estado", resultado.getString("estado"));
+                productos.add(producto);
+            }
+        }
+        return productos;
+    }
+
+    /**
      * Registra un producto nuevo.
      */
     public boolean crearProducto(
@@ -65,7 +98,7 @@ public class ProductoDAO {
 
         String sql = """
                 INSERT INTO productos
-                (nombre, descripcion, categoria, tipo_producto, precio, estado)
+                (nombre, descripcion, categoria, tipo_producto, precio_usdt, estado)
                 VALUES (?, ?, ?, ?, ?, 'Activo')
                 """;
 
@@ -96,7 +129,7 @@ public class ProductoDAO {
         String sql = """
                 UPDATE productos
                 SET nombre = ?, descripcion = ?, categoria = ?,
-                    tipo_producto = ?, precio = ?
+                    tipo_producto = ?, precio_usdt = ?
                 WHERE id_producto = ?
                 """;
 

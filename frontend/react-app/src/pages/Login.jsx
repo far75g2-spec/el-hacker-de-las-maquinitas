@@ -36,6 +36,7 @@ function Login() {
         throw new Error(resultado.message || 'Credenciales incorrectas.')
       }
 
+      window.dispatchEvent(new Event('sesion-actualizada'))
       navigate('/dashboard')
 
     } catch (err) {

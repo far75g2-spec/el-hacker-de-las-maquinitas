@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet {
             if (usuarioId <= 0) {
                 response.setStatus(401);
                 enviarRespuesta(response, false,
-                        "Correo o contraseña incorrectos.");
+                        "Error en la autenticación");
                 return;
             }
 
@@ -93,7 +93,7 @@ public class LoginServlet extends HttpServlet {
             try (PrintWriter out = response.getWriter()) {
                 out.print(
                     "{\"success\":true," +
-                    "\"message\":\"Inicio de sesión correcto.\"," +
+                    "\"message\":\"Autenticación satisfactoria\"," +
                     "\"rol\":\"" + escapar(rol) + "\"}"
                 );
             }

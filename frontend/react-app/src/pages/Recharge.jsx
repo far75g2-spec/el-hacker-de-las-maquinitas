@@ -1,32 +1,3 @@
-import PageLayout from '../components/PageLayout'
-
-function Recharge() {
-  return (
-    <PageLayout
-      title="Recargar saldo"
-      description="Interfaz para solicitar una recarga de saldo mediante USDT."
-    >
-      <form className="formulario-pagina" onSubmit={(e) => e.preventDefault()}>
-        <label>Valor de la recarga (USDT)</label>
-        <input type="number" min="1" step="0.01" placeholder="Ejemplo: 10" required />
-
-        <label>Red de transferencia</label>
-        <select defaultValue="TRC20">
-          <option value="TRC20">TRC20</option>
-        </select>
-
-        <div className="tarjeta-pagina">
-          <h3>Método de pago</h3>
-          <p>Binance - USDT</p>
-          <p>La dirección de recepción se indicará cuando se configure el servicio.</p>
-        </div>
-
-        <button className="boton boton-principal" type="submit">
-          Continuar con la recarga
-        </button>
-      </form>
-    </PageLayout>
-  )
-}
-
-export default Recharge
+import {useEffect,useState} from 'react';import PageLayout from '../components/PageLayout';
+const f=n=>`${Number(n||0).toFixed(8)} USDT`;
+export default function Recharge(){const [saldo,setSaldo]=useState(0),[mov,setMov]=useState([]),[rec,setRec]=useState([]),[monto,setMonto]=useState(''),[tx,setTx]=useState(''),[file,setFile]=useState(null),[msg,setMsg]=useState(''),[err,setErr]=useState(''),[busy,setBusy]=useState(false);async function cargar(){const [b,r]=await Promise.all([fetch('/api/billetera',{credentials:'include'}).then(x=>x.json()),fetch('/api/recargas',{credentials:'include'}).then(x=>x.json())]);if(b.success){setSaldo(Number(b.saldo_usdt));setMov(b.movimientos||[])}if(r.success)setRec(r.recargas||[])}useEffect(()=>{cargar().catch(()=>{})},[]);async function enviar(e){e.preventDefault();setErr('');setMsg('');setBusy(true);try{const fd=new FormData();fd.append('monto_usdt',monto);fd.append('tx_hash',tx);if(file)fd.append('comprobante',file);const r=await fetch('/api/recargas',{method:'POST',credentials:'include',body:fd});const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'No se pudo enviar');setMsg(d.message);setMonto('');setTx('');setFile(null);e.target.reset();await cargar()}catch(x){setErr(x.message)}finally{setBusy(false)}}return <PageLayout title="Billetera y recargas USDT" description="Solicita una recarga por Binance mediante la red TRC20. El saldo se acredita después de la revisión administrativa."><div className="tarjeta-pagina"><h2>Saldo disponible: {f(saldo)}</h2></div><form className="formulario-pagina" onSubmit={enviar}><label>Monto a recargar (USDT)</label><input type="number" min="1" step="0.00000001" required value={monto} onChange={e=>setMonto(e.target.value)}/><label>Red</label><input value="TRC20" readOnly/><label>Identificador/hash de transacción Binance</label><input value={tx} onChange={e=>setTx(e.target.value)} minLength="8" maxLength="180" required/><label>Comprobante (JPG, PNG o PDF; máximo 5 MB)</label><input type="file" accept="image/jpeg,image/png,application/pdf" onChange={e=>setFile(e.target.files?.[0]||null)}/><p>Envía el USDT únicamente a la dirección oficial que el administrador te haya confirmado. No se acredita automáticamente.</p><button className="boton boton-principal" disabled={busy}>{busy?'Enviando...':'Enviar solicitud de recarga'}</button></form>{msg&&<p role="status">{msg}</p>}{err&&<p role="alert">{err}</p>}<h2>Mis solicitudes de recarga</h2>{rec.map(x=><article className="tarjeta-pagina" key={x.id_recarga}>#{x.id_recarga} — {f(x.monto_usdt)} — {x.estado}<p>TX: {x.tx_hash}</p>{x.notas_admin&&<p>Nota: {x.notas_admin}</p>}</article>)}<h2>Movimientos de billetera</h2>{mov.map(x=><p key={x.id_movimiento}>{x.fecha?new Date(x.fecha).toLocaleString('es-CO'):''} · {x.tipo} · {f(x.monto_usdt)} · Saldo {f(x.saldo_resultante)}</p>)}</PageLayout>}

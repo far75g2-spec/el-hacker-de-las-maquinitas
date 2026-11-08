@@ -48,8 +48,9 @@ public class ProductosServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-store");
 
         try {
-            List<Map<String, Object>> productos =
-                    productoDAO.listarProductos();
+            List<Map<String, Object>> productos = esAdministrador(request)
+                    ? productoDAO.listarTodosProductos()
+                    : productoDAO.listarProductos();
 
             StringBuilder json =
                     new StringBuilder("{\"success\":true,\"productos\":[");

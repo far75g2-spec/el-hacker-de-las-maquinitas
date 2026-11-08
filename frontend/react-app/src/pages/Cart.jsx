@@ -1,21 +1,3 @@
-import PageLayout from '../components/PageLayout'
-import { Link } from 'react-router-dom'
-
-function Cart() {
-  return (
-    <PageLayout
-      title="Mi carrito"
-      description="Revisa los productos seleccionados antes de realizar tu pedido."
-    >
-      <div className="tarjeta-pagina">
-        <h2>Tu carrito está vacío</h2>
-        <p>Cuando agregues licencias o créditos, aparecerán en esta sección.</p>
-        <Link className="boton boton-principal" to="/catalogo">
-          Explorar catálogo
-        </Link>
-      </div>
-    </PageLayout>
-  )
-}
-
-export default Cart
+import {useEffect,useState} from 'react';import {Link,useNavigate} from 'react-router-dom';import PageLayout from '../components/PageLayout';import {leerCarrito,guardarCarrito,vaciarCarrito} from '../utils/carrito';
+const fmt=n=>`${Number(n).toFixed(2)} USDT`;
+export default function Cart(){const [items,setItems]=useState(leerCarrito),[saldo,setSaldo]=useState(null),[msg,setMsg]=useState(''),[err,setErr]=useState(''),[busy,setBusy]=useState(false),nav=useNavigate();useEffect(()=>{fetch('/api/billetera',{credentials:'include'}).then(r=>r.json()).then(d=>{if(d.success)setSaldo(Number(d.saldo_usdt))}).catch(()=>{})},[]);function update(next){setItems(next);guardarCarrito(next)}const total=items.reduce((s,x)=>s+Number(x.precio)*x.cantidad,0);async function comprar(){setBusy(true);setErr('');setMsg('');try{const r=await fetch('/api/pedidos',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items.map(x=>({id_producto:x.id_producto,cantidad:x.cantidad}))})});const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'No se pudo procesar la compra');vaciarCarrito();setItems([]);setMsg(`Pedido #${d.id_pedido} creado. Se descontó ${fmt(total)} de tu billetera.`);setTimeout(()=>nav('/ordenes'),1800)}catch(e){setErr(e.message)}finally{setBusy(false)}}return <PageLayout title="Mi carrito" description="Revisa tu compra antes de confirmar.">{items.length===0?<div className="tarjeta-pagina"><h2>Tu carrito está vacío</h2><Link to="/catalogo">Explorar catálogo</Link></div>:<div className="tarjeta-pagina">{items.map(x=><div key={x.id_producto} style={{display:'flex',gap:12,alignItems:'center',justifyContent:'space-between',padding:'12px 0',borderBottom:'1px solid #334155'}}><div><strong>{x.nombre}</strong><p>{fmt(x.precio)} c/u</p></div><input aria-label={`Cantidad ${x.nombre}`} type="number" min="1" max="100" value={x.cantidad} onChange={e=>update(items.map(y=>y.id_producto===x.id_producto?{...y,cantidad:Math.max(1,Math.min(100,Number(e.target.value)||1))}:y))} style={{width:75}}/><strong>{fmt(x.precio*x.cantidad)}</strong><button onClick={()=>update(items.filter(y=>y.id_producto!==x.id_producto))}>Quitar</button></div>)}<h2>Total: {fmt(total)}</h2><p>Saldo disponible: {saldo===null?'Consultando...':fmt(saldo)}</p>{saldo!==null&&saldo<total&&<p>Saldo insuficiente. <Link to="/recargar">Solicitar recarga</Link></p>}<button className="boton boton-principal" disabled={busy||saldo===null||saldo<total} onClick={comprar}>{busy?'Procesando...':'Confirmar compra con saldo USDT'}</button></div>}{msg&&<p role="status">{msg}</p>}{err&&<p role="alert">{err}</p>}</PageLayout>}

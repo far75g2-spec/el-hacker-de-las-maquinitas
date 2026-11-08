@@ -43,9 +43,11 @@ function Header() {
     }
 
     consultarSesion()
+    window.addEventListener('sesion-actualizada', consultarSesion)
 
     return () => {
       activo = false
+      window.removeEventListener('sesion-actualizada', consultarSesion)
     }
   }, [])
 

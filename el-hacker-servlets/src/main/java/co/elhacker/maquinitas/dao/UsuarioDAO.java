@@ -84,9 +84,11 @@ public class UsuarioDAO {
         List<Map<String, Object>> usuarios = new ArrayList<>();
 
         String sql = """
-                SELECT id_usuario, nombre, correo, telefono, rol, estado
-                FROM usuarios
-                ORDER BY id_usuario DESC
+                SELECT u.id_usuario, u.nombre, u.correo, u.telefono, u.rol, u.estado,
+                       COALESCE(b.saldo_usdt, 0.00000000) AS saldo_usdt
+                FROM usuarios u
+                LEFT JOIN billeteras b ON b.id_usuario = u.id_usuario
+                ORDER BY u.id_usuario DESC
                 """;
 
         try (Connection conexion = Conexion.obtenerConexion();
@@ -108,6 +110,9 @@ public class UsuarioDAO {
                         resultado.getString("rol"));
                 usuario.put("estado",
                         resultado.getString("estado"));
+                // El saldo se consulta desde la billetera asociada al usuario.
+                usuario.put("saldo_usdt",
+                        resultado.getBigDecimal("saldo_usdt"));
 
                 usuarios.add(usuario);
             }

@@ -1,21 +1,3 @@
-import PageLayout from '../components/PageLayout'
-
-function Orders() {
-  return (
-    <PageLayout
-      title="Mis órdenes"
-      description="Consulta el seguimiento de tus pedidos."
-    >
-      <div className="tarjeta-pagina">
-        <h2>Historial de pedidos</h2>
-        <p>
-          Aquí aparecerán tus órdenes, fechas de solicitud,
-          productos y estados de procesamiento.
-        </p>
-        <p>Actualmente no hay órdenes para mostrar.</p>
-      </div>
-    </PageLayout>
-  )
-}
-
-export default Orders
+import {useEffect,useState} from 'react';import PageLayout from '../components/PageLayout';
+const f=n=>`${Number(n).toFixed(2)} USDT`;
+export default function Orders(){const [orders,setOrders]=useState([]),[error,setError]=useState('');useEffect(()=>{fetch('/api/pedidos',{credentials:'include',cache:'no-store'}).then(async r=>{const d=await r.json();if(!r.ok||!d.success)throw Error(d.message||'No se pudieron cargar los pedidos');setOrders(d.pedidos||[])}).catch(e=>setError(e.message))},[]);return <PageLayout title="Mis órdenes" description="Consulta el estado y detalle de tus compras.">{error&&<p role="alert">{error}</p>}{orders.length===0&&!error&&<p>Aún no tienes pedidos registrados.</p>}{orders.map(o=><article className="tarjeta-pagina" key={o.id_pedido}><h2>Pedido #{o.id_pedido}</h2><p>Fecha: {o.fecha?new Date(o.fecha).toLocaleString('es-CO'):'—'}</p><p>Estado: <strong>{o.estado}</strong></p>{o.detalles?.map((d,i)=><p key={i}>{d.nombre_producto} × {d.cantidad} — {f(d.subtotal_usdt)}</p>)}<h3>Total: {f(o.total_usdt)}</h3></article>)}</PageLayout>}
