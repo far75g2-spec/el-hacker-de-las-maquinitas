@@ -1,0 +1,6 @@
+$kind: http-request
+description: Requiere sesión. Cliente consulta sus pedidos; administrador consulta
+  todos.
+url: http://localhost:8080/el-hacker-servlets/pedidos
+method: GET
+order: 1000

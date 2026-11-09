@@ -1,0 +1,14 @@
+$kind: http-request
+description: Requiere administrador. Crea un producto de prueba en la base de datos.
+url: http://localhost:8080/el-hacker-servlets/productos
+method: POST
+body:
+  type: urlencoded
+  content:
+    accion: crear
+    nombre: Producto de prueba EV03
+    descripcion: Producto temporal para pruebas de API
+    categoria: Software
+    tipo_producto: Licencia
+    precio: '5.00'
+order: 2000

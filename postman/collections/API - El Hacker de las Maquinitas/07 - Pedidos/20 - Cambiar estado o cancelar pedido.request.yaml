@@ -1,0 +1,10 @@
+$kind: http-request
+description: 'Requiere administrador. Estados: Pendiente de procesamiento, En proceso,
+  Completado, Cancelado. Para probar devolución, cancelar solo un pedido de prueba
+  pagado; el sistema devuelve el saldo una sola vez.'
+url: http://localhost:8080/el-hacker-servlets/pedidos
+method: POST
+body:
+  type: json
+  content: "{\n  \"id_pedido\": 1,\n  \"estado\": \"En proceso\"\n}"
+order: 3000

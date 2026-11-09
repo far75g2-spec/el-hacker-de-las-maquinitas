@@ -1,0 +1,5 @@
+$kind: http-request
+description: Consulta si existe una sesión autenticada y devuelve usuarioId y rol.
+url: http://localhost:8080/el-hacker-servlets/sesion
+method: GET
+order: 3000

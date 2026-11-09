@@ -1,0 +1,6 @@
+$kind: http-request
+description: Requiere iniciar sesión. Devuelve saldo y movimientos de la billetera
+  del usuario actual.
+url: http://localhost:8080/el-hacker-servlets/billetera
+method: GET
+order: 1000

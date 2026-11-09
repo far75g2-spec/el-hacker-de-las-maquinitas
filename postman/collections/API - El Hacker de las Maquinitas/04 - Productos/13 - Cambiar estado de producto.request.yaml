@@ -1,0 +1,12 @@
+$kind: http-request
+description: 'Requiere administrador. Reemplazar ID_PRODUCTO_PRUEBA; estado permitido:
+  Activo o Inactivo.'
+url: http://localhost:8080/el-hacker-servlets/productos
+method: POST
+body:
+  type: urlencoded
+  content:
+    accion: estado
+    id_producto: ID_PRODUCTO_PRUEBA
+    estado: Inactivo
+order: 4000

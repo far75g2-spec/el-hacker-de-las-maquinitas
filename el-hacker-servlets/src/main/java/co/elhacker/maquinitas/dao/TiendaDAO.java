@@ -48,7 +48,105 @@ public class TiendaDAO {
   List<Map<String,Object>> out=new ArrayList<>();String sql="SELECT p.id_pedido,p.id_usuario,u.nombre,u.correo,p.total_usdt,p.estado,p.fecha FROM pedidos p JOIN usuarios u ON u.id_usuario=p.id_usuario "+filtro+" ORDER BY p.id_pedido DESC";
   try(Connection c=Conexion.obtenerConexion();PreparedStatement p=c.prepareStatement(sql)){if(usuario>0)p.setInt(1,usuario);try(ResultSet rs=p.executeQuery()){while(rs.next()){Map<String,Object>x=new LinkedHashMap<>();long id=rs.getLong("id_pedido");x.put("id_pedido",id);x.put("id_usuario",rs.getInt("id_usuario"));x.put("nombre",rs.getString("nombre"));x.put("correo",rs.getString("correo"));x.put("total_usdt",rs.getBigDecimal("total_usdt"));x.put("estado",rs.getString("estado"));x.put("fecha",rs.getTimestamp("fecha"));List<Map<String,Object>> det=new ArrayList<>();try(PreparedStatement q=c.prepareStatement("SELECT nombre_producto,precio_unitario_usdt,cantidad,subtotal_usdt FROM pedido_detalles WHERE id_pedido=?")){q.setLong(1,id);try(ResultSet d=q.executeQuery()){while(d.next()){Map<String,Object>z=new LinkedHashMap<>();z.put("nombre_producto",d.getString(1));z.put("precio_unitario_usdt",d.getBigDecimal(2));z.put("cantidad",d.getInt(3));z.put("subtotal_usdt",d.getBigDecimal(4));det.add(z);}}}x.put("detalles",det);out.add(x);}}}return out;
  }
- public boolean cambiarEstadoPedido(long id,String estado) throws SQLException {if(!Set.of("Pendiente de procesamiento","En proceso","Completado","Cancelado").contains(estado))throw new IllegalArgumentException("Estado no permitido.");try(Connection c=Conexion.obtenerConexion();PreparedStatement p=c.prepareStatement("UPDATE pedidos SET estado=? WHERE id_pedido=?")){p.setString(1,estado);p.setLong(2,id);return p.executeUpdate()>0;}}
+ /**
+  * Cambia el estado de un pedido. Si se cancela un pedido pagado,
+  * reintegra el total a la billetera y registra el movimiento en la
+  * misma transacción. El bloqueo FOR UPDATE impide dos devoluciones
+  * simultáneas del mismo pedido.
+  */
+ public boolean cambiarEstadoPedido(long id, String estado) throws SQLException {
+  Set<String> estadosPermitidos = Set.of(
+      "Pendiente de procesamiento", "En proceso", "Completado", "Cancelado");
+  if (id <= 0 || estado == null || !estadosPermitidos.contains(estado)) {
+   throw new IllegalArgumentException("Identificador o estado del pedido no válido.");
+  }
+
+  try (Connection c = Conexion.obtenerConexion()) {
+   c.setAutoCommit(false);
+   try {
+    int usuario;
+    BigDecimal total;
+    String estadoActual;
+
+    try (PreparedStatement p = c.prepareStatement(
+        "SELECT id_usuario, total_usdt, estado FROM pedidos WHERE id_pedido=? FOR UPDATE")) {
+     p.setLong(1, id);
+     try (ResultSet rs = p.executeQuery()) {
+      if (!rs.next()) {
+       c.rollback();
+       return false;
+      }
+      usuario = rs.getInt("id_usuario");
+      total = rs.getBigDecimal("total_usdt");
+      estadoActual = rs.getString("estado");
+     }
+    }
+
+    if ("Cancelado".equalsIgnoreCase(estadoActual)) {
+     throw new IllegalArgumentException("El pedido ya está cancelado; no se puede devolver el saldo otra vez.");
+    }
+    if ("Completado".equalsIgnoreCase(estadoActual) && "Cancelado".equals(estado)) {
+     throw new IllegalArgumentException("No se puede cancelar un pedido que ya fue completado.");
+    }
+
+    if ("Cancelado".equals(estado)) {
+     if (total == null || total.signum() <= 0) {
+      throw new IllegalStateException("El pedido no tiene un total válido para devolver.");
+     }
+
+     BigDecimal saldo;
+     try (PreparedStatement p = c.prepareStatement(
+         "SELECT saldo_usdt FROM billeteras WHERE id_usuario=? FOR UPDATE")) {
+      p.setInt(1, usuario);
+      try (ResultSet rs = p.executeQuery()) {
+       if (!rs.next()) {
+        throw new IllegalStateException("No existe la billetera del cliente; no se pudo realizar la devolución.");
+       }
+       saldo = rs.getBigDecimal("saldo_usdt");
+      }
+     }
+
+     BigDecimal nuevoSaldo = dinero(saldo.add(total));
+     try (PreparedStatement p = c.prepareStatement(
+         "UPDATE billeteras SET saldo_usdt=? WHERE id_usuario=?")) {
+      p.setBigDecimal(1, nuevoSaldo);
+      p.setInt(2, usuario);
+      p.executeUpdate();
+     }
+
+     try (PreparedStatement p = c.prepareStatement(
+         "INSERT INTO movimientos_saldo " +
+         "(id_usuario,tipo,monto_usdt,saldo_resultante,referencia,descripcion) " +
+         "VALUES(?,'Devolucion',?,?,?,?)")) {
+      p.setInt(1, usuario);
+      p.setBigDecimal(2, dinero(total));
+      p.setBigDecimal(3, nuevoSaldo);
+      p.setString(4, "DEV-PED-" + id);
+      p.setString(5, "Devolución del saldo por cancelación del pedido #" + id);
+      p.executeUpdate();
+     }
+    }
+
+    try (PreparedStatement p = c.prepareStatement(
+        "UPDATE pedidos SET estado=? WHERE id_pedido=?")) {
+     p.setString(1, estado);
+     p.setLong(2, id);
+     p.executeUpdate();
+    }
+
+    c.commit();
+    return true;
+   } catch (Exception e) {
+    c.rollback();
+    if (e instanceof SQLException sql) throw sql;
+    if (e instanceof IllegalArgumentException iae) throw iae;
+    if (e instanceof RuntimeException re) throw re;
+    throw new SQLException("No se pudo actualizar el pedido ni procesar su devolución.", e);
+   } finally {
+    c.setAutoCommit(true);
+   }
+  }
+ }
  public long crearRecarga(int usuario,BigDecimal monto,String tx,String archivo) throws SQLException {
   if(monto==null||monto.compareTo(new BigDecimal("1.00000000"))<0||monto.scale()>8)throw new IllegalArgumentException("La recarga mínima es 1 USDT y admite hasta 8 decimales.");
   try(Connection c=Conexion.obtenerConexion();PreparedStatement p=c.prepareStatement("INSERT INTO recargas(id_usuario,monto_usdt,red,tx_hash,archivo_comprobante,estado) VALUES(?,?,'TRC20',?,?,'Pendiente')",Statement.RETURN_GENERATED_KEYS)){p.setInt(1,usuario);p.setBigDecimal(2,dinero(monto));p.setString(3,tx);p.setString(4,archivo);p.executeUpdate();try(ResultSet rs=p.getGeneratedKeys()){rs.next();return rs.getLong(1);}}

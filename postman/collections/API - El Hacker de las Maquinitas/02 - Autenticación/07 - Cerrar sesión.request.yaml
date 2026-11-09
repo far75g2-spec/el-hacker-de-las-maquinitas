@@ -1,0 +1,5 @@
+$kind: http-request
+description: Invalida la sesión actual. Ejecutar al finalizar las pruebas.
+url: http://localhost:8080/el-hacker-servlets/logout
+method: POST
+order: 4000

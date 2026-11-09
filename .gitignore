@@ -13,3 +13,5 @@
 # Configuración local de IDE
 .idea/
 .vscode/
+# Copia de respaldo del frontend antiguo
+frontend_respaldo/

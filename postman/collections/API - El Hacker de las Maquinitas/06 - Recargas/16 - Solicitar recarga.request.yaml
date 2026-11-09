@@ -1,0 +1,16 @@
+$kind: http-request
+description: Requiere sesión de cliente. Petición multipart; el comprobante es opcional.
+  Para adjuntarlo, añade campo form-data comprobante de tipo File (JPG, PNG o PDF,
+  máximo 5 MB). No acredita saldo hasta aprobación administrativa.
+url: http://localhost:8080/el-hacker-servlets/recargas
+method: POST
+body:
+  type: formdata
+  content:
+  - key: monto_usdt
+    value: '10'
+    type: text
+  - key: tx_hash
+    value: HASH_DE_PRUEBA_12345678
+    type: text
+order: 2000

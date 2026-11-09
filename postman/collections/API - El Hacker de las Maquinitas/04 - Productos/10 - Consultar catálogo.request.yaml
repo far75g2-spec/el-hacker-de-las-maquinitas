@@ -1,0 +1,5 @@
+$kind: http-request
+description: Catálogo público; con sesión de administrador devuelve todos los productos.
+url: http://localhost:8080/el-hacker-servlets/productos
+method: GET
+order: 1000

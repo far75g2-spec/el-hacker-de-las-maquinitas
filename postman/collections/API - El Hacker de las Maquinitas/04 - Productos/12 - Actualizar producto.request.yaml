@@ -1,0 +1,16 @@
+$kind: http-request
+description: Requiere administrador. Reemplazar ID_PRODUCTO_PRUEBA por el ID de un
+  producto de prueba.
+url: http://localhost:8080/el-hacker-servlets/productos
+method: POST
+body:
+  type: urlencoded
+  content:
+    accion: actualizar
+    id_producto: ID_PRODUCTO_PRUEBA
+    nombre: Producto de prueba EV03 actualizado
+    descripcion: Producto actualizado para pruebas
+    categoria: Software
+    tipo_producto: Licencia
+    precio: '6.00'
+order: 3000

@@ -1,0 +1,11 @@
+$kind: http-request
+description: Requiere administrador. Cambiar ID_USUARIO_PRUEBA por un usuario de prueba;
+  usar Activo para reactivarlo.
+url: http://localhost:8080/el-hacker-servlets/usuarios
+method: POST
+body:
+  type: urlencoded
+  content:
+    id_usuario: ID_USUARIO_PRUEBA
+    estado: Inactivo
+order: 2000

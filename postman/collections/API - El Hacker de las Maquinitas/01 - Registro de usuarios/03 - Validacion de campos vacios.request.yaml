@@ -1,0 +1,29 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/el-hacker-servlets/registro
+method: POST
+queryParams:
+  - key: nombre
+    value: null
+    disabled: true
+    description: ""
+  - key: correo
+    value: null
+    disabled: true
+    description: ""
+  - key: "telefono "
+    value: null
+    disabled: true
+    description: ""
+  - key: cleve
+    value: null
+    disabled: true
+    description: ""
+body:
+  type: urlencoded
+  content:
+    nombre: ""
+    correo: ""
+    telefono: ""
+    clave: ""
+order: 5000

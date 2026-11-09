@@ -1,0 +1,6 @@
+$kind: http-request
+description: Requiere sesión. Cliente consulta sus recargas; administrador consulta
+  todas.
+url: http://localhost:8080/el-hacker-servlets/recargas
+method: GET
+order: 1000

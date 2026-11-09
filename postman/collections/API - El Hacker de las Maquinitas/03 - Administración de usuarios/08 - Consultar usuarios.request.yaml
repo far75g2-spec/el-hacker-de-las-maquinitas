@@ -1,0 +1,5 @@
+$kind: http-request
+description: Requiere sesión de administrador. Devuelve la lista de usuarios.
+url: http://localhost:8080/el-hacker-servlets/usuarios
+method: GET
+order: 1000

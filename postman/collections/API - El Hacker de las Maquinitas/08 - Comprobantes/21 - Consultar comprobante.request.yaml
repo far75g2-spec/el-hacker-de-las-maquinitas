@@ -1,0 +1,6 @@
+$kind: http-request
+description: Requiere administrador. Sustituir UUID-DEL-COMPROBANTE.jpg por el nombre
+  real generado al subir un comprobante; extensiones permitidas jpg, png, pdf.
+url: http://localhost:8080/el-hacker-servlets/comprobantes/UUID-DEL-COMPROBANTE.jpg
+method: GET
+order: 1000

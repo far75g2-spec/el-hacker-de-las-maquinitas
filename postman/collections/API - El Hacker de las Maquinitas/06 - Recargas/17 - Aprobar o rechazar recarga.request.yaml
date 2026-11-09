@@ -1,0 +1,12 @@
+$kind: http-request
+description: 'Requiere administrador. Reemplazar ID_RECARGA_PRUEBA por una recarga
+  pendiente de prueba. Estado permitido: Aprobada o Rechazada.'
+url: http://localhost:8080/el-hacker-servlets/recargas
+method: POST
+body:
+  type: urlencoded
+  content:
+    id_recarga: ID_RECARGA_PRUEBA
+    estado: Aprobada
+    notas_admin: Transacción verificada en entorno de pruebas
+order: 3000
